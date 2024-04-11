@@ -17,8 +17,8 @@ def load_video (video_file):
 @click.option('--visualize', is_flag=True, help='Visualize the extracted tracks')
 def main(videos, visualize):
     from .articulator.cotracker import track_hands
+    from .plot import plot_prosody
     for video_file in videos:
         video = load_video(video_file)
         hand = track_hands(video)
-        print(hand)
-
+        plot_prosody(hand, "plot.png")

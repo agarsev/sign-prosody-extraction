@@ -45,6 +45,7 @@ numpy==1.26.4
     # via imageio
     # via matplotlib
     # via nptyping
+    # via pandas
     # via scikit-learn
     # via scipy
     # via sign-prosody-extraction
@@ -79,6 +80,8 @@ nvidia-nvtx-cu12==12.1.105
     # via torch
 packaging==24.0
     # via matplotlib
+pandas==2.2.2
+    # via sign-prosody-extraction
 pillow==10.3.0
     # via imageio
     # via matplotlib
@@ -89,6 +92,9 @@ pyparsing==3.1.2
     # via matplotlib
 python-dateutil==2.9.0.post0
     # via matplotlib
+    # via pandas
+pytz==2024.1
+    # via pandas
 scikit-learn==1.4.2
     # via sign-prosody-extraction
 scipy==1.13.0
@@ -109,3 +115,5 @@ torchvision==0.17.2
     # via sign-prosody-extraction
 typing-extensions==4.11.0
     # via torch
+tzdata==2024.1
+    # via pandas
