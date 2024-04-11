@@ -18,7 +18,7 @@ def track_hands(video: VideoArray) -> Tuple[ArticulatorArray, int]:
     out_of_bounds = np.where(backtrack[:, 1] > v_height * 0.9)[0]
     first_frame = v_len - out_of_bounds[0] if len(out_of_bounds) else 0
 
-    return track_movement(video, start_point=first_frame)[first_frame:], first_frame
+    return track_movement(video, start_point=first_frame)[None, first_frame:], first_frame
 
 
 def track_movement(video: VideoArray, start_point) -> ArticulatorArray:

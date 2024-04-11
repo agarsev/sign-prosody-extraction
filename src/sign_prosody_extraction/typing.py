@@ -13,5 +13,5 @@ TrackXYVAArray = NDArray[Shape["* tracks, * frames, [x, y, v, theta]"], Float]
 
 # Numpy NDArray for a single articulator track, with position, velocity and
 # direction components
-ArticulatorArray = NDArray[Shape["* frames, [x, y, v, theta]"], Float]
+ArticulatorArray = NDArray[Shape["2 hands, * frames, [x, y, v, theta]"], Float]
 

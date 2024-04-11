@@ -15,12 +15,17 @@ def load_video (video_file):
 @click.command()
 @click.argument('videos', nargs=-1, type=click.Path(exists=True), required=True)
 @click.option('--visualize', is_flag=True, help='Visualize the extracted tracks')
-def main(videos, visualize):
-    from .articulator.cotracker import track_hands
-    from .plot import plot_prosody
-    from .visualize import overlay_track
+@click.option('--cotracker', 'algorithm', flag_value='cotracker', default=True, help='Use the CoTracker algorithm')
+@click.option('--mediapipe', 'algorithm', flag_value='mediapipe', help='Use the MediaPipe algorithm')
+def main(videos, visualize, algorithm):
+    if algorithm == 'cotracker':
+        from .articulator.cotracker import track_hands
+    elif algorithm == 'mediapipe':
+        from .articulator.mediapipe import track_hands
+    #from .plot import plot_prosody
+    from .visualize import overlay_tracks
     for video_file in videos:
         video = load_video(video_file)
-        hand, first_frame = track_hands(video)
-        plot_prosody(hand, "plot.png")
-        overlay_track(video[:, first_frame:], hand, "track.mp4")
+        hands, first_frame = track_hands(video)
+        #plot_prosody(hands[0], "plot.png")
+        overlay_tracks(video[:, first_frame:], hands, "track.mp4")

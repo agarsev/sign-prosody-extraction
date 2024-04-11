@@ -17,9 +17,10 @@ dependencies = [
     "scikit-learn>=1.4.2",
     "pandas>=2.2.2",
     "flow-vis>=0.1",
+    "mediapipe>=0.10.11",
 ]
 readme = "README.md"
-requires-python = ">= 3.8"
+requires-python = "^=3.10"
 
 [project.scripts]
 sign-prosody-extraction = "sign_prosody_extraction.cli:main"
