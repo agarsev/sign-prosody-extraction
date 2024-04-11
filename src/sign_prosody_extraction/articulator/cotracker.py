@@ -1,10 +1,10 @@
 import torch
 import numpy as np
-from scipy.signal import savgol_filter
 from sklearn.cluster import KMeans
 
-from ..typing import VideoArray, ArticulatorArray, TrackXYArray, TrackXYVAArray
+from ..typing import VideoArray, ArticulatorArray, TrackXYArray, TrackXYVTArray
 from typing import Tuple
+from . import compute_speed
 
 
 def track_hands(video: VideoArray) -> Tuple[ArticulatorArray, int]:
@@ -23,7 +23,7 @@ def track_hands(video: VideoArray) -> Tuple[ArticulatorArray, int]:
 
 def track_movement(video: VideoArray, start_point) -> ArticulatorArray:
     tracks_xy = track_video(video, start=start_point)
-    tracks_xyra = compute_speed(tracks_xy)
+    tracks_xyra = compute_speed(tracks_xy, window_length=7)
     fg = separate_fg(tracks_xyra)
     return np.mean(fg, axis=0)
 
@@ -39,19 +39,7 @@ def track_video (video: VideoArray, grid_size=50, start=0) -> TrackXYArray:
     return pred_tracks.permute(0, 2, 1, 3).squeeze().cpu().numpy()
 
 
-def compute_speed(tracks: TrackXYArray) -> TrackXYVAArray:
-    dx = savgol_filter(
-        tracks[:, :, 0], window_length=7, polyorder=5, deriv=1, axis=1
-    )
-    dy = savgol_filter(
-        tracks[:, :, 1], window_length=7, polyorder=5, deriv=1, axis=1
-    )
-    r = np.sqrt(dx**2 + dy**2)
-    theta = np.arctan2(dy, dx)
-    return np.concatenate([tracks, r[:, :, None], theta[:, :, None]], axis=2)
-
-
-def separate_fg(tracks: TrackXYVAArray) -> TrackXYVAArray:
+def separate_fg(tracks: TrackXYVTArray) -> TrackXYVTArray:
     '''Separate tracks by speed into foreground and background, return foreground'''
     velos = tracks[:, :, 2] # track, frame, speed
     kmeans = KMeans(n_clusters=2, n_init=4).fit(velos)

@@ -22,10 +22,10 @@ def main(videos, visualize, algorithm):
         from .articulator.cotracker import track_hands
     elif algorithm == 'mediapipe':
         from .articulator.mediapipe import track_hands
-    #from .plot import plot_prosody
+    from .plot import plot_prosody
     from .visualize import overlay_tracks
     for video_file in videos:
         video = load_video(video_file)
         hands, first_frame = track_hands(video)
-        #plot_prosody(hands[0], "plot.png")
+        plot_prosody(hands, "plot.png")
         overlay_tracks(video[:, first_frame:], hands, "track.mp4")

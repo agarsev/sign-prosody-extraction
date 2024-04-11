@@ -9,7 +9,7 @@ TrackXYArray = NDArray[Shape["* tracks, * frames, [x, y]"], Float]
 
 # Numpy NDArray for a number of tracks on a video, including velocity and
 # direction components
-TrackXYVAArray = NDArray[Shape["* tracks, * frames, [x, y, v, theta]"], Float]
+TrackXYVTArray = NDArray[Shape["* tracks, * frames, [x, y, v, theta]"], Float]
 
 # Numpy NDArray for a single articulator track, with position, velocity and
 # direction components

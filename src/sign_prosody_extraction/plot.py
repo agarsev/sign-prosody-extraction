@@ -21,10 +21,6 @@ scale_img = plt.imread(Path(__file__).parent.parent / 'img/dir_scale.png')
 # points is a list of points to demarkate
 def plot_prosody(track: ArticulatorArray, output, long=False, fps=25, areas=[], points=[]):
 
-    df = pd.DataFrame(track, columns=["x", "y", "vel", "angle"])
-    df["normangle"] = (0.25 + df["angle"] / (2 * np.pi)) % 1.0
-    df["color"] = df["normangle"].apply(cmap)
-
     fig = plt.figure(figsize=(8 if long else 4, 3), dpi=300)
     ax = plt.gca()
 
@@ -44,12 +40,16 @@ def plot_prosody(track: ArticulatorArray, output, long=False, fps=25, areas=[], 
     for p in points:
         ax.axvline(x=p/fps, linewidth=1, color='olive', alpha=0.2)
 
-    for i in range(1, len(df)):
-        ax.plot(
-            [j / fps for j in df.index[i - 1 : i + 1]],
-            df["vel"].iloc[i - 1 : i + 1],
-            color=df["color"].iloc[i],
-        )
+    offset = 0
+    if len(track)>1:
+        plot_hand(ax, track[1], 0, fps)
+        offset = max(track[1][:, 2])
+        ax.axhline(offset * 1.2, color="black", linewidth=0.5, linestyle="--")
+        ax.text(0, offset * 1.3, "H1 ", fontfamily="Tex Gyre Heros", va="bottom", ha="right")
+        ax.text(0, offset, "H2 ", fontfamily="Tex Gyre Heros", va="top", ha="right")
+        xlim = ax.get_xlim()
+        ax.set_xlim(xlim[0] - xlim[1]*0.05, xlim[1])
+    plot_hand(ax, track[0], offset*1.4, fps)
 
     plt.tight_layout()
     plt.subplots_adjust(left=0.06, bottom=0.2)
@@ -65,3 +65,17 @@ def plot_prosody(track: ArticulatorArray, output, long=False, fps=25, areas=[], 
     axins.axis("off")
 
     plt.savefig(output)
+
+
+def plot_hand(ax, hand, offset, fps):
+    df = pd.DataFrame(hand, columns=["x", "y", "vel", "angle"])
+    df["normangle"] = (0.25 + df["angle"] / (2 * np.pi)) % 1.0
+    df["color"] = df["normangle"].apply(cmap)
+    df["vel"] = df["vel"] + offset
+
+    for i in range(1, len(df)):
+        ax.plot(
+            [j / fps for j in df.index[i - 1 : i + 1]],
+            df["vel"].iloc[i - 1 : i + 1],
+            color=df["color"].iloc[i],
+        )
