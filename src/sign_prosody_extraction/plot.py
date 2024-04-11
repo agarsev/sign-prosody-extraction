@@ -5,6 +5,8 @@ import numpy as np
 from pathlib import Path
 import pandas as pd
 
+from .typing import ArticulatorArray
+
 # Colors for plotting direction
 colors = ["red", "green", "gold", "blue", "red"]  # H, X (right in the image), L, Y
 nodes = [0, 0.25, 0.5, 0.75, 1]
@@ -17,7 +19,7 @@ scale_img = plt.imread(Path(__file__).parent.parent / 'img/dir_scale.png')
 # fps to write seconds value in axis
 # marks is a list of dicts with start, end and gloss to highlight parts
 # points is a list of points to demarkate
-def plot_prosody(track, output, long=False, fps=25, areas=[], points=[]):
+def plot_prosody(track: ArticulatorArray, output, long=False, fps=25, areas=[], points=[]):
 
     df = pd.DataFrame(track, columns=["x", "y", "vel", "angle"])
     df["normangle"] = (0.25 + df["angle"] / (2 * np.pi)) % 1.0

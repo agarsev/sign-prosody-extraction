@@ -1,14 +1,9 @@
 import torch
 import numpy as np
-from nptyping import NDArray, Shape, Float
 from scipy.signal import savgol_filter
 from sklearn.cluster import KMeans
-from typing import Tuple
 
-VideoArray = NDArray[Shape["1, * frames, 3 channels, * height, * width"], Float]
-Track2Array = NDArray[Shape["* tracks, * frames, [x, y]"], Float]
-Track4Array = NDArray[Shape["* tracks, * frames, [x, y, v, theta]"], Float]
-ArticulatorArray = NDArray[Shape["* frames, [x, y, v, theta]"], Float]
+from ..typing import VideoArray, ArticulatorArray, TrackXYArray, TrackXYVAArray
 
 
 def track_hands(video: VideoArray) -> ArticulatorArray:
@@ -28,7 +23,7 @@ def track_hands(video: VideoArray) -> ArticulatorArray:
 def track_movement(video: VideoArray, start_point) -> ArticulatorArray:
     tracks_xy = track_video(video, start=start_point)
     tracks_xyra = compute_speed(tracks_xy)
-    fg, _ = separate(tracks_xyra)
+    fg = separate_fg(tracks_xyra)
     return np.mean(fg, axis=0)
 
 
@@ -36,14 +31,14 @@ cotracker = torch.hub.load("facebookresearch/co-tracker", "cotracker2",
                            verbose=False).to('cuda')
 
 
-def track_video (video: VideoArray, grid_size=50, start=0) -> Track2Array:
+def track_video (video: VideoArray, grid_size=50, start=0) -> TrackXYArray:
     # The number of points is grid_size*grid_size
     pred_tracks: NDArray[Shape["1, * frames, * points, [x, y]"], Float]
     pred_tracks, _ = cotracker(torch.from_numpy(video).cuda(), grid_size=grid_size, grid_query_frame=start)
     return pred_tracks.permute(0, 2, 1, 3).squeeze().cpu().numpy()
 
 
-def compute_speed(tracks: Track2Array) -> Track4Array:
+def compute_speed(tracks: TrackXYArray) -> TrackXYVAArray:
     dx = savgol_filter(
         tracks[:, :, 0], window_length=7, polyorder=5, deriv=1, axis=1
     )
@@ -55,8 +50,8 @@ def compute_speed(tracks: Track2Array) -> Track4Array:
     return np.concatenate([tracks, r[:, :, None], theta[:, :, None]], axis=2)
 
 
-def separate(tracks: Track4Array) -> Tuple[Track4Array, Track4Array]:
-    '''Separate tracks by speed into foreground and background.'''
+def separate_fg(tracks: TrackXYVAArray) -> TrackXYVAArray:
+    '''Separate tracks by speed into foreground and background, return foreground'''
     velos = tracks[:, :, 2] # track, frame, speed
     kmeans = KMeans(n_clusters=2, n_init=4).fit(velos)
     c1 = np.array([tracks[i] for i in range(len(tracks)) if kmeans.labels_[i] == 0])
@@ -65,9 +60,9 @@ def separate(tracks: Track4Array) -> Tuple[Track4Array, Track4Array]:
     avg1 = np.mean(c1[:, :, 2].mean(axis=1))
     avg2 = np.mean(c2[:, :, 2].mean(axis=1))
     if avg1 > avg2:
-        return c1, c2
+        return c1
     else:
-        return c2, c1
+        return c2
 
 
 from cotracker.utils.visualizer import Visualizer
