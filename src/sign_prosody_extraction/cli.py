@@ -16,9 +16,9 @@ def load_video (video_file):
 @click.argument('videos', nargs=-1, type=click.Path(exists=True), required=True)
 @click.option('--visualize', is_flag=True, help='Visualize the extracted tracks')
 def main(videos, visualize):
-    from .articulator.cotracker import track_video
+    from .articulator.cotracker import track_hands
     for video_file in videos:
         video = load_video(video_file)
-        tracks = track_video(video)
-        print(tracks)
+        hand = track_hands(video)
+        print(hand)
 

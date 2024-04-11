@@ -26,6 +26,8 @@ imageio-ffmpeg==0.4.9
     # via imageio
 jinja2==3.1.3
     # via torch
+joblib==1.4.0
+    # via scikit-learn
 kiwisolver==1.4.5
     # via matplotlib
 markupsafe==2.1.5
@@ -36,10 +38,15 @@ mpmath==1.3.0
     # via sympy
 networkx==3.3
     # via torch
+nptyping==2.5.0
+    # via sign-prosody-extraction
 numpy==1.26.4
     # via contourpy
     # via imageio
     # via matplotlib
+    # via nptyping
+    # via scikit-learn
+    # via scipy
     # via sign-prosody-extraction
     # via torchvision
 nvidia-cublas-cu12==12.1.3.1
@@ -82,12 +89,19 @@ pyparsing==3.1.2
     # via matplotlib
 python-dateutil==2.9.0.post0
     # via matplotlib
+scikit-learn==1.4.2
+    # via sign-prosody-extraction
+scipy==1.13.0
+    # via scikit-learn
+    # via sign-prosody-extraction
 setuptools==69.2.0
     # via imageio-ffmpeg
 six==1.16.0
     # via python-dateutil
 sympy==1.12
     # via torch
+threadpoolctl==3.4.0
+    # via scikit-learn
 torch==2.2.2
     # via sign-prosody-extraction
     # via torchvision
