@@ -16,6 +16,7 @@ dependencies = [
     "scipy>=1.13.0",
     "scikit-learn>=1.4.2",
     "pandas>=2.2.2",
+    "flow-vis>=0.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

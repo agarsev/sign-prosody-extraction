@@ -4,9 +4,10 @@ from scipy.signal import savgol_filter
 from sklearn.cluster import KMeans
 
 from ..typing import VideoArray, ArticulatorArray, TrackXYArray, TrackXYVAArray
+from typing import Tuple
 
 
-def track_hands(video: VideoArray) -> ArticulatorArray:
+def track_hands(video: VideoArray) -> Tuple[ArticulatorArray, int]:
     _, v_len, __, v_height, v_width = video.shape
 
     # Find first frame where hands are inside of frame
@@ -17,7 +18,7 @@ def track_hands(video: VideoArray) -> ArticulatorArray:
     out_of_bounds = np.where(backtrack[:, 1] > v_height * 0.9)[0]
     first_frame = v_len - out_of_bounds[0] if len(out_of_bounds) else 0
 
-    return track_movement(video, start_point=first_frame)[first_frame:]
+    return track_movement(video, start_point=first_frame)[first_frame:], first_frame
 
 
 def track_movement(video: VideoArray, start_point) -> ArticulatorArray:
@@ -63,16 +64,3 @@ def separate_fg(tracks: TrackXYVAArray) -> TrackXYVAArray:
         return c1
     else:
         return c2
-
-
-from cotracker.utils.visualizer import Visualizer
-vis = Visualizer(save_dir="./saved_videos", pad_value=0, mode="optical_flow",
-                 tracks_leave_trace=10, linewidth=2)
-
-
-def visualize_tracks (video, tracks, filename):
-    # remove r and theta, transpose and add batch dimension
-    cotracks = torch.from_numpy(tracks[:, :, 0:2]).permute(1, 0, 2)[None]
-    vis.visualize(torch.from_numpy(video), cotracks, filename=filename)
-
-

@@ -18,7 +18,9 @@ def load_video (video_file):
 def main(videos, visualize):
     from .articulator.cotracker import track_hands
     from .plot import plot_prosody
+    from .visualize import overlay_track
     for video_file in videos:
         video = load_video(video_file)
-        hand = track_hands(video)
+        hand, first_frame = track_hands(video)
         plot_prosody(hand, "plot.png")
+        overlay_track(video[:, first_frame:], hand, "track.mp4")
