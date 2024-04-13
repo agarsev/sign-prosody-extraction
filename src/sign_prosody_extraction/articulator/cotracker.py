@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans
 from ..typing import VideoArray, ArticulatorArray, TrackXYArray, TrackXYVTArray
 from typing import Tuple
 from . import compute_speed
+from .. import cache
 
 
 def track_hands(video: VideoArray) -> Tuple[ArticulatorArray, int]:
@@ -32,6 +33,7 @@ cotracker = torch.hub.load("facebookresearch/co-tracker", "cotracker2",
                            verbose=False).to('cuda')
 
 
+@cache
 def track_video (video: VideoArray, grid_size=50, start=0) -> TrackXYArray:
     # The number of points is grid_size*grid_size
     pred_tracks: NDArray[Shape["1, * frames, * points, [x, y]"], Float]
