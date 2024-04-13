@@ -2,15 +2,8 @@
 # which receives a number of videos to process. There are different options
 # to control the process.
 import click
-import imageio.v3 as iio
-import numpy as np
 
-# Returned shape is 1, n_frames, 3 (channels?), height, width
-def load_video (video_file):
-    frames = iio.imread(str(video_file), plugin="FFMPEG")
-    video = np.transpose(frames.astype(np.float32), (0,3,1,2))
-    return video[None, :]
-
+from . import load_video, visualize
 
 @click.command()
 @click.argument('videos', nargs=-1, type=click.Path(exists=True), required=True)
@@ -20,39 +13,34 @@ def load_video (video_file):
 @click.option('--targets/--no-targets', 'find_targets', default=True, help='Find target points')
 @click.option('--plot/--no-plot', default=False, help='Output a plot with the extracted prosody')
 @click.option('--thumbnails', type=str, help='''Generate thumbnails at the specified frames. Can be FIRST, LAST, ALL, or a list of frame numbers''')
-def main(videos, algorithm, track_video, find_targets, plot, thumbnails):
+@click.option('--clip/--no-clip', default=False, help='Clip the video from the first target to the last (using FFMPEG)')
+def main(videos, algorithm, track_video, find_targets, plot, thumbnails, clip):
+
     if algorithm == 'cotracker':
         from .articulator.cotracker import track_hands
     elif algorithm == 'mediapipe':
         from .articulator.mediapipe import track_hands
     if thumbnails:
         find_targets = True
-    from .plot import plot_prosody
-    from .visualize import overlay_tracks
-    from .targets import get_target_points
+
     for video_file in videos:
         video = load_video(video_file)
         hands, first_frame = track_hands(video)
+
         if track_video:
-            overlay_tracks(video[:, first_frame:], hands, "track.mp4")
-        targets = get_target_points(hands[0]) if find_targets else [] # For now only right hand
+            visualize.overlay_tracks(video[:, first_frame:], hands, "track.mp4")
+
+        targets = []
+        if find_targets:
+            from .targets import get_target_points
+            targets = get_target_points(hands[0])
+
         if plot:
+            from .plot import plot_prosody
             plot_prosody(hands, "plot.png", points=targets)
+
         if thumbnails:
-            get_thumbnails(video, targets, first_frame, thumbnails)
+            visualize.get_thumbnails(video, targets, first_frame, thumbnails)
 
-
-def get_thumbnails(video, targets, first_frame, frames):
-    from torchvision.transforms import ToPILImage
-    if frames == 'FIRST':
-        frames = [targets[0]]
-    elif frames == 'LAST':
-        frames = [targets[-1]]
-    elif frames == 'ALL':
-        frames = targets
-    else:
-        frames = [targets[i] for i in frames]
-    to_pil = ToPILImage()
-    for i, f in enumerate(frames):
-        image = video[0, f+first_frame].transpose(1,2,0).astype(np.uint8)
-        to_pil(image).save(f"thumbnail_{i}.png")
+        if clip:
+            visualize.clip_video(video_file, targets[0]+first_frame, targets[-1]+first_frame)

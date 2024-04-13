@@ -1,5 +1,6 @@
 from pathlib import Path
 import torch
+import numpy as np
 
 from .typing import VideoArray, ArticulatorArray
 
@@ -12,3 +13,25 @@ def overlay_tracks (video: VideoArray, track: ArticulatorArray, output):
     # remove r and theta, transpose and add additional dimensions
     cotracks = torch.from_numpy(track[:, :, 0:2]).permute(1, 0, 2)[None]
     vis.visualize(torch.from_numpy(video), cotracks, filename=output.stem)
+
+
+def get_thumbnails(video: VideoArray, targets, first_frame, frames):
+    from torchvision.transforms import ToPILImage
+    if frames == 'FIRST':
+        frames = [targets[0]]
+    elif frames == 'LAST':
+        frames = [targets[-1]]
+    elif frames == 'ALL':
+        frames = targets
+    else:
+        frames = [targets[i] for i in frames]
+    to_pil = ToPILImage()
+    for i, f in enumerate(frames):
+        image = video[0, f+first_frame].transpose(1,2,0).astype(np.uint8)
+        to_pil(image).save(f"thumbnail_{i}.png")
+
+
+def clip_video(video_file, start, end, fps=25):
+    from subprocess import run
+    run(["ffmpeg", "-v", "warning", "-ss", str(start/fps), "-to", str(end/fps),
+         "-i", video_file, "clip.mp4"])
