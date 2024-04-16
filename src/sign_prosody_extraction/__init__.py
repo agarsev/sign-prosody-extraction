@@ -5,8 +5,10 @@ import numpy as np
 
 from .typing import VideoArray
 
-if not os.getenv("NO_CACHE", False):
-    memory = Memory(".joblib", verbose=0, bytes_limit="500M")
+CACHE_DIR = os.getenv("CACHE_DIR")
+
+if CACHE_DIR:
+    memory = Memory(CACHE_DIR, verbose=0, bytes_limit=os.getenv("CACHE_LIMIT", "500M"))
 
     def cache(func):
         return memory.cache(func)
