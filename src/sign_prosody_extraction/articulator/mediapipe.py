@@ -16,8 +16,11 @@ def track_hands(video: VideoArray, fps=25) -> Tuple[ArticulatorArray, int]:
     global detector
     if not detector:
         options = vision.PoseLandmarkerOptions(
-            base_options=mp.tasks.BaseOptions(model_asset_path='data/pose_landmarker.task'),
-            running_mode=vision.RunningMode.VIDEO)
+            base_options=mp.tasks.BaseOptions(
+                model_asset_path="data/pose_landmarker.task"
+            ),
+            running_mode=vision.RunningMode.VIDEO,
+        )
         detector = vision.PoseLandmarker.create_from_options(options)
 
     _, v_len, __, v_height, v_width = video.shape
@@ -27,7 +30,7 @@ def track_hands(video: VideoArray, fps=25) -> Tuple[ArticulatorArray, int]:
     for n in range(v_len):
         frame = video[n]
         image = mp.Image(mp.ImageFormat.SRGB, frame)
-        detection = detector.detect_for_video(image, n*fps)
+        detection = detector.detect_for_video(image, n * fps)
         lwrist = detection.pose_landmarks[0][15]
         rwrist = detection.pose_landmarks[0][16]
         hand_tracks[0, n, :2] = [rwrist.x * v_width, rwrist.y * v_height]

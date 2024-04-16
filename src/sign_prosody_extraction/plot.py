@@ -12,16 +12,18 @@ colors = ["red", "green", "gold", "blue", "red"]  # H, X (right in the image), L
 nodes = [0, 0.25, 0.5, 0.75, 1]
 cmap = LinearSegmentedColormap.from_list("custom", list(zip(nodes, colors)), N=256)
 
-scale_img = plt.imread(Path(__file__).parent.parent / 'img/dir_scale.png')
+scale_img = plt.imread(Path(__file__).parent.parent / "img/dir_scale.png")
+
 
 # Receive numpy array
 # long: make a wider plot
 # fps to write seconds value in axis
 # marks is a list of dicts with start, end and gloss to highlight parts
 # points is a list of points to demarkate
-def plot_prosody(track: ArticulatorArray, output, long=False, fps=25, areas=[], points=[]):
-
-    fig = plt.figure(figsize=(8 if long else 4, 3), dpi=300)
+def plot_prosody(
+    track: ArticulatorArray, output, long=False, fps=25, areas=[], points=[]
+):
+    plt.figure(figsize=(8 if long else 4, 3), dpi=300)
     ax = plt.gca()
 
     for m in areas:
@@ -38,18 +40,20 @@ def plot_prosody(track: ArticulatorArray, output, long=False, fps=25, areas=[], 
         )
 
     for p in points:
-        ax.axvline(x=p/fps, linewidth=1, color='olive', alpha=0.2)
+        ax.axvline(x=p / fps, linewidth=1, color="olive", alpha=0.2)
 
     offset = 0
-    if len(track)>1:
+    if len(track) > 1:
         plot_hand(ax, track[1], 0, fps)
         offset = max(track[1][:, 2])
         ax.axhline(offset * 1.2, color="black", linewidth=0.5, linestyle="--")
-        ax.text(0, offset * 1.3, "H1 ", fontfamily="Tex Gyre Heros", va="bottom", ha="right")
+        ax.text(
+            0, offset * 1.3, "H1 ", fontfamily="Tex Gyre Heros", va="bottom", ha="right"
+        )
         ax.text(0, offset, "H2 ", fontfamily="Tex Gyre Heros", va="top", ha="right")
         xlim = ax.get_xlim()
-        ax.set_xlim(xlim[0] - xlim[1]*0.05, xlim[1])
-    plot_hand(ax, track[0], offset*1.4, fps)
+        ax.set_xlim(xlim[0] - xlim[1] * 0.05, xlim[1])
+    plot_hand(ax, track[0], offset * 1.4, fps)
 
     plt.tight_layout()
     plt.subplots_adjust(left=0.06, bottom=0.2)

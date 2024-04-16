@@ -1,5 +1,4 @@
 from nptyping import NDArray, Shape, Float
-from typing import Tuple
 
 # Numpy NDArray for a video
 VideoArray = NDArray[Shape["1, * frames, 3 channels, * height, * width"], Float]
@@ -14,4 +13,3 @@ TrackXYVTArray = NDArray[Shape["* tracks, * frames, [x, y, v, theta]"], Float]
 # Numpy NDArray for a single articulator track, with position, velocity and
 # direction components
 ArticulatorArray = NDArray[Shape["2 hands, * frames, [x, y, v, theta]"], Float]
-
