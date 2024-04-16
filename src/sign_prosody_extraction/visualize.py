@@ -5,7 +5,7 @@ import numpy as np
 from .typing import VideoArray, ArticulatorArray
 
 
-def overlay_tracks(video: VideoArray, track: ArticulatorArray, output):
+def overlay_tracks(video: VideoArray, track: ArticulatorArray, output="track.mp4"):
     from .articulator.cotracker import cotracker  # noqa: F401
     from cotracker.utils.visualizer import Visualizer
 
@@ -22,7 +22,7 @@ def overlay_tracks(video: VideoArray, track: ArticulatorArray, output):
     vis.visualize(torch.from_numpy(video), cotracks, filename=output.stem)
 
 
-def get_thumbnails(video: VideoArray, targets, first_frame, frames):
+def get_thumbnails(video: VideoArray, targets, first_frame, frames, output="thumb"):
     from torchvision.transforms import ToPILImage
 
     if frames == "FIRST":
@@ -36,10 +36,10 @@ def get_thumbnails(video: VideoArray, targets, first_frame, frames):
     to_pil = ToPILImage()
     for i, f in enumerate(frames):
         image = video[0, f + first_frame].transpose(1, 2, 0).astype(np.uint8)
-        to_pil(image).save(f"thumbnail_{i}.png")
+        to_pil(image).save(f"{output}_{i}.png")
 
 
-def clip_video(video_file, start, end, fps=25):
+def clip_video(video_file, start, end, output="clip.mp4", fps=25):
     from subprocess import run
 
     run(
@@ -53,6 +53,6 @@ def clip_video(video_file, start, end, fps=25):
             str(end / fps),
             "-i",
             video_file,
-            "clip.mp4",
+            output,
         ]
     )

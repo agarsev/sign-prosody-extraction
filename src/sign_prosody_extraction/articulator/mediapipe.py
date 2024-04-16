@@ -1,6 +1,7 @@
 import mediapipe as mp
 from mediapipe.tasks.python import vision
 import numpy as np
+import os
 
 from ..typing import VideoArray, ArticulatorArray
 from typing import Tuple
@@ -9,6 +10,7 @@ from .. import cache
 
 
 detector = None
+POSE_LANDMARKER = os.getenv("POSE_LANDMARKER", "data/pose_landmarker.task")
 
 
 @cache
@@ -17,7 +19,7 @@ def track_hands(video: VideoArray, fps=25) -> Tuple[ArticulatorArray, int]:
     if not detector:
         options = vision.PoseLandmarkerOptions(
             base_options=mp.tasks.BaseOptions(
-                model_asset_path="data/pose_landmarker.task"
+                model_asset_path=POSE_LANDMARKER,
             ),
             running_mode=vision.RunningMode.VIDEO,
         )
