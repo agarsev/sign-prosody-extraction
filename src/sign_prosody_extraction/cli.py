@@ -13,24 +13,25 @@ from . import load_video, visualize
     "algorithm",
     flag_value="cotracker",
     default=True,
-    help="Use the CoTracker algorithm",
+    help="Use the original CoTracker algorithm for tracking.",
 )
 @click.option(
     "--mediapipe",
     "algorithm",
     flag_value="mediapipe",
-    help="Use the MediaPipe algorithm",
+    help="Use the alternative MediaPipe algorithm for tracking.",
 )
 @click.option(
     "--track-video/--no-track-video",
     default=False,
-    help="Output a video with the extracted tracks",
+    help="Output a video with the extracted tracks overlaid.",
 )
 @click.option(
-    "--targets/--no-targets", "find_targets", default=True, help="Find target points"
+    "--targets/--no-targets", "find_targets", default=True,
+    help="Find target points in the video."
 )
 @click.option(
-    "--plot/--no-plot", default=False, help="Output a plot with the extracted prosody"
+    "--plot/--no-plot", default=False, help="Output a plot with the extracted prosody."
 )
 @click.option(
     "--thumbnails",
@@ -40,9 +41,13 @@ from . import load_video, visualize
 @click.option(
     "--clip/--no-clip",
     default=False,
-    help="Clip the video from the first target to the last (using FFMPEG)",
+    help="Clip the video from the first target to the last (requires FFMPEG).",
 )
+@click.version_option()
 def main(videos, algorithm, track_video, find_targets, plot, thumbnails, clip):
+    """Command line tool implementing the methodology outlined in "Automated
+    Extraction of Prosodic Structure from Unannotated Sign Language Video"
+    (Sevilla et al., 2024)."""
     if algorithm == "cotracker":
         from .articulator.cotracker import track_hands
     elif algorithm == "mediapipe":

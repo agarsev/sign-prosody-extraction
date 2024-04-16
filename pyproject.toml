@@ -1,7 +1,9 @@
 [project]
 name = "sign-prosody-extraction"
-version = "0.1.0"
-description = "Add your description here"
+version = "24.04"
+description = """Code and command-line tool for "Automated Extraction of
+Prosodic Structure from Unannotated Sign Language Video" (Sevilla et al.,
+2024)."""
 authors = [
     { name = "Antonio F. G. Sevilla", email = "afgs@ucm.es" }
 ]
