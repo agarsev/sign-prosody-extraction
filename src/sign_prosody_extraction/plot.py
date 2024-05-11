@@ -12,7 +12,7 @@ colors = ["red", "green", "gold", "blue", "red"]  # H, X (right in the image), L
 nodes = [0, 0.25, 0.5, 0.75, 1]
 cmap = LinearSegmentedColormap.from_list("custom", list(zip(nodes, colors)), N=256)
 
-scale_img = plt.imread(Path(__file__).parent.parent / "img/dir_scale.png")
+scale_img = plt.imread(Path(__file__).parent / "img/dir_scale.png")
 
 
 # Receive numpy array

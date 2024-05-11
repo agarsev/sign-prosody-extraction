@@ -20,7 +20,7 @@ from . import load_video, visualize
     "--mediapipe",
     "algorithm",
     flag_value="mediapipe",
-    help="Use the alternative MediaPipe algorithm for tracking.",
+    help="Use the alternative MediaPipe algorithm for tracking (pose_landmarker model needs to be available).",
 )
 @click.option(
     "--track-video/--no-track-video",
