@@ -56,13 +56,26 @@ bi-manual signs and a formal and numerical evaluation of accuracy. Nonetheless,
 the absence of any preprocessing requirements may make it useful for other
 researchers and datasets.
 
-- Read more at the LREC-COLING 2024 proceedings (coming soon)
+- Read more at the [LREC-COLING 2024 proceedings](https://aclanthology.org/2024.lrec-main.161/)
 
 ## How to cite
 
 If you use our code, please do cite us! Also don't hesitate to get in touch.
 
-Bibtex code: coming soon!
+```bibtex
+@inproceedings{sevilla-etal-2024-automated-extraction,
+    title = "Automated Extraction of Prosodic Structure from Unannotated Sign Language Video",
+    author = "Sevilla, Antonio F. G. and Lahoz-Bengoechea, Jos{\'e} Mar{\'\i}a and Diaz, Alberto",
+    editor = "Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen",
+    booktitle = "Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)",
+    month = may,
+    year = "2024",
+    address = "Torino, Italia",
+    publisher = "ELRA and ICCL",
+    url = "https://aclanthology.org/2024.lrec-main.161",
+    pages = "1808--1816",
+}
+```
 
 ## Authors
 
