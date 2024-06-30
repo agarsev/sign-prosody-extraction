@@ -4,7 +4,7 @@
 import click
 from pathlib import Path
 
-from . import load_video, visualize
+from . import load_video, get_tracker, visualize
 
 
 @click.command()
@@ -78,10 +78,8 @@ def main(
     """Command line tool implementing the methodology outlined in "Automated
     Extraction of Prosodic Structure from Unannotated Sign Language Video"
     (Sevilla et al., 2024)."""
-    if algorithm == "cotracker":
-        from .articulator.cotracker import track_hands
-    elif algorithm == "mediapipe":
-        from .articulator.mediapipe import track_hands
+
+    track_hands = get_tracker(algorithm)
     if everything:
         track_video = plot = clip = True
         thumbnails = "ALL"
@@ -109,7 +107,12 @@ def main(
         if plot:
             from .plot import plot_prosody
 
-            plot_prosody(hands, output_dir / f"{ofile}_plot.png", points=targets)
+            plot_prosody(
+                hands, 
+                output_dir / f"{ofile}_plot.png",
+                long=len(video[0]) > 100,
+                points=targets
+            )
 
         if thumbnails:
             visualize.get_thumbnails(

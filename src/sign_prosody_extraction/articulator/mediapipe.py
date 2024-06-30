@@ -10,7 +10,12 @@ from .. import cache
 
 
 detector = None
+
 POSE_LANDMARKER = os.getenv("POSE_LANDMARKER", "data/pose_landmarker.task")
+if not os.path.exists(POSE_LANDMARKER):
+    POSE_LANDMARKER = "pose_landmarker.task"
+if not os.path.exists(POSE_LANDMARKER):
+    raise FileNotFoundError(f"PoseLandmarker model not found, please download it first")
 
 
 @cache
@@ -30,7 +35,7 @@ def track_hands(video: VideoArray, fps=25) -> Tuple[ArticulatorArray, int]:
     video = video[0].transpose(0, 2, 3, 1).astype(np.uint8)
     hand_tracks = np.zeros((2, v_len, 2), dtype=float)
     for n in range(v_len):
-        frame = video[n]
+        frame = video[n].copy()
         image = mp.Image(mp.ImageFormat.SRGB, frame)
         detection = detector.detect_for_video(image, n * fps)
         lwrist = detection.pose_landmarks[0][15]

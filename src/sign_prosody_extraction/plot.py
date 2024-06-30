@@ -21,7 +21,7 @@ scale_img = plt.imread(Path(__file__).parent / "img/dir_scale.png")
 # marks is a list of dicts with start, end and gloss to highlight parts
 # points is a list of points to demarkate
 def plot_prosody(
-    track: ArticulatorArray, output, long=False, fps=25, areas=[], points=[]
+    track: ArticulatorArray, output=None, long=False, fps=25, areas=[], points=[]
 ):
     plt.figure(figsize=(8 if long else 4, 3), dpi=300)
     ax = plt.gca()
@@ -52,7 +52,8 @@ def plot_prosody(
         )
         ax.text(0, offset, "H2 ", fontfamily="Tex Gyre Heros", va="top", ha="right")
         xlim = ax.get_xlim()
-        ax.set_xlim(xlim[0] - xlim[1] * 0.05, xlim[1])
+        left = max(xlim[0] - xlim[1] * 0.05, -0.6)
+        ax.set_xlim(left, xlim[1])
     plot_hand(ax, track[0], offset * 1.4, fps)
 
     plt.tight_layout()
@@ -68,7 +69,8 @@ def plot_prosody(
     axins.imshow(scale_img)
     axins.axis("off")
 
-    plt.savefig(output)
+    if output:
+        plt.savefig(output)
 
 
 def plot_hand(ax, hand, offset, fps):

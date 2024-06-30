@@ -4,6 +4,7 @@ import os
 import numpy as np
 
 from .typing import VideoArray
+from . import plot
 
 CACHE_DIR = os.getenv("CACHE_DIR")
 
@@ -23,3 +24,11 @@ def load_video(video_file: str) -> VideoArray:
     frames = iio.imread(str(video_file), plugin="FFMPEG")
     video = np.transpose(frames.astype(np.float32), (0, 3, 1, 2))
     return video[None, :]
+
+
+def get_tracker(algorithm: str):
+    if algorithm == "mediapipe":
+        from .articulator.mediapipe import track_hands
+    else:
+        from .articulator.cotracker import track_hands
+    return track_hands

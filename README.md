@@ -9,6 +9,9 @@ extract some information from unannotated video.
 
 This code is free and open source software, licensed under the EUPL.
 
+You can now try it in Colab:
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/agarsev/sign-prosody-extraction/blob/notebook/sign_prosody_extraction.ipynb)
+
 ## Features
 
 - Command line interface
