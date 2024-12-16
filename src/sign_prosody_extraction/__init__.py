@@ -13,6 +13,7 @@ if CACHE_DIR:
 
     def cache(func):
         return memory.cache(func)
+
 else:
 
     def cache(func):

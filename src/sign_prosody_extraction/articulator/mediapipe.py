@@ -41,9 +41,13 @@ def track_hands(video: VideoArray, fps=25) -> Tuple[ArticulatorArray, int]:
         frame = video[n].copy()
         image = mp.Image(mp.ImageFormat.SRGB, frame)
         detection = detector.detect_for_video(image, n * fps)
-        lwrist = detection.pose_landmarks[0][15]
-        rwrist = detection.pose_landmarks[0][16]
-        hand_tracks[0, n, :2] = [rwrist.x * v_width, rwrist.y * v_height]
-        hand_tracks[1, n, :2] = [lwrist.x * v_width, lwrist.y * v_height]
-
+        landmarks = detection.pose_landmarks[0]
+        hand_tracks[0, n, :2] = average_hand(landmarks, (15, 17, 19), v_width, v_height)
+        hand_tracks[1, n, :2] = average_hand(landmarks, (16, 18, 20), v_width, v_height)
     return compute_speed(hand_tracks, window_length=14), 0
+
+
+def average_hand(all_landmarks, indices, v_width, v_height):
+    xs = [all_landmarks[i].x * v_width for i in indices]
+    ys = [all_landmarks[i].y * v_height for i in indices]
+    return [sum(xs) / len(xs), sum(ys) / len(ys)]

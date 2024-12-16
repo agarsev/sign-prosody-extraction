@@ -33,9 +33,10 @@ def track_movement(video: VideoArray, start_point) -> ArticulatorArray:
     return np.mean(fg, axis=0)
 
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 cotracker = torch.hub.load(
     "facebookresearch/co-tracker", "cotracker3_online", verbose=False
-).to("cuda")
+).to(device)
 
 
 def track_video(video: VideoArray, grid_size=50, start=0) -> TrackXYArray:
