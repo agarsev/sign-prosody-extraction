@@ -1,13 +1,13 @@
-import mediapipe as mp
-from mediapipe.tasks.python import vision
-import numpy as np
 import os
-
-from ..typing import VideoArray, ArticulatorArray
 from typing import Tuple
-from . import compute_speed
-from .. import cache
 
+import mediapipe as mp
+import numpy as np
+from mediapipe.tasks.python import vision
+
+from .. import cache
+from ..typing import ArticulatorArray, VideoArray
+from . import compute_speed
 
 detector = None
 
@@ -15,7 +15,10 @@ POSE_LANDMARKER = os.getenv("POSE_LANDMARKER", "data/pose_landmarker.task")
 if not os.path.exists(POSE_LANDMARKER):
     POSE_LANDMARKER = "pose_landmarker.task"
 if not os.path.exists(POSE_LANDMARKER):
-    raise FileNotFoundError(f"PoseLandmarker model not found, please download it first")
+    raise FileNotFoundError(
+        "PoseLandmarker model not found, please download it first "
+        "(https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker#models)"
+    )
 
 
 @cache

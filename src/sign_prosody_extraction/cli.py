@@ -1,10 +1,11 @@
 # The command line interface for the application. There is one entry point,
 # which receives a number of videos to process. There are different options
 # to control the process.
-import click
 from pathlib import Path
 
-from . import load_video, get_tracker, visualize
+import click
+
+from . import get_tracker, load_video, visualize
 
 
 @click.command()
@@ -108,10 +109,10 @@ def main(
             from .plot import plot_prosody
 
             plot_prosody(
-                hands, 
+                hands,
                 output_dir / f"{ofile}_plot.png",
                 long=len(video[0]) > 100,
-                points=targets
+                points=targets,
             )
 
         if thumbnails:

@@ -1,6 +1,6 @@
 [project]
 name = "sign-prosody-extraction"
-version = "24.06"
+version = "24.06.dev1"
 description = """Code and command-line tool for "Automated Extraction of
 Prosodic Structure from Unannotated Sign Language Video" (Sevilla et al.,
 2024)."""
