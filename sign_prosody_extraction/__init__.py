@@ -4,7 +4,7 @@ import imageio.v3 as iio
 import numpy as np
 from joblib import Memory
 
-from . import plot
+from . import export, plot
 from .typing import VideoArray
 
 CACHE_DIR = os.getenv("CACHE_DIR")

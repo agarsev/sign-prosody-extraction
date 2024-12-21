@@ -1,9 +1,10 @@
-from matplotlib.colors import LinearSegmentedColormap
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-import numpy as np
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 from .typing import ArticulatorArray
 
@@ -21,7 +22,13 @@ scale_img = plt.imread(Path(__file__).parent / "img/dir_scale.png")
 # marks is a list of dicts with start, end and gloss to highlight parts
 # points is a list of points to demarkate
 def plot_prosody(
-    track: ArticulatorArray, output=None, long=False, fps=25, areas=[], points=[]
+    track: ArticulatorArray,
+    output=None,
+    long=False,
+    fps=25,
+    areas=[],
+    points=[],
+    textoptions={},
 ):
     plt.figure(figsize=(8 if long else 4, 3), dpi=300)
     ax = plt.gca()
@@ -34,9 +41,9 @@ def plot_prosody(
             (start + end) / 2,
             ax.get_ylim()[1] * 0.9,
             m["gloss"],
-            fontfamily="Tex Gyre Heros",
             ha="center",
             va="top",
+            **textoptions,
         )
 
     for p in points:
@@ -47,10 +54,8 @@ def plot_prosody(
         plot_hand(ax, track[1], 0, fps)
         offset = max(track[1][:, 2])
         ax.axhline(offset * 1.2, color="black", linewidth=0.5, linestyle="--")
-        ax.text(
-            0, offset * 1.3, "H1 ", fontfamily="Tex Gyre Heros", va="bottom", ha="right"
-        )
-        ax.text(0, offset, "H2 ", fontfamily="Tex Gyre Heros", va="top", ha="right")
+        ax.text(0, offset * 1.3, "H1 ", va="bottom", ha="right", **textoptions)
+        ax.text(0, offset, "H2 ", va="top", ha="right", **textoptions)
         xlim = ax.get_xlim()
         left = max(xlim[0] - xlim[1] * 0.05, -0.6)
         ax.set_xlim(left, xlim[1])

@@ -5,7 +5,7 @@ import imageio.v3 as iio
 from .typing import ArticulatorArray
 
 
-def export_csv(video_file, track: ArticulatorArray, output_file):
+def csv(video_file, track: ArticulatorArray, output_file):
     of = Path(output_file).open("w")
     two_hands = len(track) > 1
     video_meta = iio.immeta(str(video_file))

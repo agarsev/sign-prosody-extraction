@@ -135,9 +135,9 @@ def main(
             )
 
         if csv:
-            from .csvexport import export_csv
+            from . import export
 
-            export_csv(
+            export.csv(
                 video_file,
                 hands,
                 output_dir / f"{ofile}_ts.csv",
