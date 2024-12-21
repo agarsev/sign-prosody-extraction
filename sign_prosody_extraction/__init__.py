@@ -1,10 +1,11 @@
-from joblib import Memory
-import imageio.v3 as iio
 import os
-import numpy as np
 
-from .typing import VideoArray
+import imageio.v3 as iio
+import numpy as np
+from joblib import Memory
+
 from . import plot
+from .typing import VideoArray
 
 CACHE_DIR = os.getenv("CACHE_DIR")
 

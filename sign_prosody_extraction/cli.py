@@ -63,6 +63,11 @@ from . import get_tracker, load_video, visualize
     default="output",
     help="Output directory for results.",
 )
+@click.option(
+    "--csv/--no-csv",
+    default=False,
+    help="Export the analysis results as a csv time series importable by ELAN, for example.",
+)
 @click.version_option()
 def main(
     videos,
@@ -75,6 +80,7 @@ def main(
     everything,
     filename,
     output_dir,
+    csv,
 ):
     """Command line tool implementing the methodology outlined in "Automated
     Extraction of Prosodic Structure from Unannotated Sign Language Video"
@@ -126,4 +132,13 @@ def main(
                 targets[0] + first_frame,
                 targets[-1] + first_frame,
                 output_dir / f"{ofile}_clip.mp4",
+            )
+
+        if csv:
+            from .csvexport import export_csv
+
+            export_csv(
+                video_file,
+                hands,
+                output_dir / f"{ofile}_ts.csv",
             )
