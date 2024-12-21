@@ -88,7 +88,7 @@ def main(
 
     track_hands = get_tracker(algorithm)
     if everything:
-        track_video = plot = clip = True
+        track_video = plot = clip = csv = True
         thumbnails = "ALL"
     if thumbnails or clip:
         find_targets = True

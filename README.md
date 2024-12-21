@@ -23,8 +23,9 @@ You can now try it in Colab:
 - Extract a short clip that includes only the sign articulation, ignoring
     preparation and relaxation. This can help dictionary makers prepare high
     significance animated thumbnails of their videos.
-- Use either cotracker or mediapipe, as outlined in Börstell, 2023, for the
+- Use either cotracker or mediapipe as outlined in Börstell (2023) for the
     articulator tracking.
+- Export the data as CSV to use it in [ELAN](https://archive.mpi.nl/tla/elan) or similar.
 
 ## Usage
 

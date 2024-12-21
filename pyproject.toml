@@ -1,12 +1,12 @@
 [project]
 name = "sign-prosody-extraction"
-version = "24.06.dev1"
+version = "24.12"
 description = """Code and command-line tool for "Automated Extraction of
 Prosodic Structure from Unannotated Sign Language Video" (Sevilla et al.,
 2024)."""
-authors = [
-    { name = "Antonio F. G. Sevilla", email = "afgs@ucm.es" }
-]
+authors = [{ name = "Antonio F. G. Sevilla", email = "afgs@ucm.es" }]
+readme = "README.md"
+license = {text = "EUPL-1.2"}
 dependencies = [
     "torch>=2.2.2",
     "click>=8.1.7",
@@ -21,8 +21,10 @@ dependencies = [
     "flow-vis>=0.1",
     "mediapipe>=0.10.11",
 ]
-readme = "README.md"
 requires-python = "==3.10.*"
+
+[project.urls]
+Repository = "https://github.com/agarsev/sign-prosody-extraction"
 
 [project.scripts]
 sign-prosody-extraction = "sign_prosody_extraction.cli:main"
